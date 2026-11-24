@@ -1,38 +1,27 @@
 
-name: Build V-Lines APK
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
 
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+android {
+    namespace = "com.example.vlines"
+    compileSdk = 35
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    defaultConfig {
+        applicationId = "com.example.vlines"
+        minSdk = 26
+        targetSdk = 35
+        versionCode = 2
+        versionName = "1.1"
+    }
 
-      - name: Extract project
-        run: unzip -o '*.zip' -d .
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.9'
-
-      - name: Build APK
-        run: gradle assembleDebug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: V-Lines-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
